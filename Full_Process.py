@@ -11,11 +11,11 @@ mycursor = mydb.cursor()
 
 student_id = input("ID: ")
 
-mycursor.execute("SELECT * FROM names_and_sign_ins WHERE id = %s", (student_id,))
+mycursor.execute("SELECT * FROM names_and_sign_ins WHERE ID = %s", (student_id,))
 result = mycursor.fetchone()
 
 if result is not None:
-    mycursor.execute("UPDATE names_and_sign_ins SET sign_in_count = sign_in_count + 1 WHERE id = %s", (student_id,))
+    mycursor.execute("UPDATE names_and_sign_ins SET `Sign-in-Count` = `Sign-in-Count` + 1 WHERE ID = %s", (student_id,))
     print("Successfully sign in")
     mydb.commit()
 else:
