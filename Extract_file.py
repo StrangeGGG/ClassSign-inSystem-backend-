@@ -1,13 +1,7 @@
-import mysql.connector
+from Connector import create_connection
 import pandas as pd
 
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="elec498g7",
-    database="database_v2"
-)
-
+mydb = create_connection()
 mycursor = mydb.cursor()
 
 mycursor.execute("SELECT * FROM names_and_sign_ins")
@@ -18,3 +12,5 @@ df = pd.DataFrame(rows, columns=
                    mycursor.description])
 
 df.to_excel("Extract.xlsx", index=False)
+
+print("Extraction is finished")

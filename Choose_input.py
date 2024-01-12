@@ -1,4 +1,4 @@
-import mysql.connector
+from Connector import create_connection
 import pandas as pd
 from tkinter import Tk, filedialog
 import os
@@ -16,12 +16,7 @@ def main():
     df = pd.read_excel(file_path)
 
     # Connect to the MySQL database
-    mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="elec498g7",
-        database="database_v1"
-    )
+    mydb = create_connection()
     mycursor = mydb.cursor()
     # mycursor.execute("CREATE DATABASE database_v2")
 
