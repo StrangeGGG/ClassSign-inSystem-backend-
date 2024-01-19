@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from flask_login import UserMixin
 
 class User(UserMixin):
@@ -16,8 +17,23 @@ def read_users_from_excel(file_path):
 
     return users
 
-excel_file_path = './names_and_sign_ins.xlsx'
-users = read_users_from_excel(excel_file_path)
+def convert_sign_count_to_array(df, column_name, array_length):
+    if 'Sign-in-Count' in df.columns:
+        sign_count_array = np.pad(df['Sign-in-Count'].values, (0, array_length - len(df['Sign-in-Count'])), 'constant')
+    else:
+        sign_count_array = np.zeros(array_length, dtype=int)
 
-for user_id, user in users.items():
-    print(f"User ID: {user_id}, Name: {user.first_name} {user.last_name}, Sign Count: {user.sign_count}")
+    # Drop the 'Sign-in-Count' column if it exists
+    if 'Sign-in-Count' in df.columns:
+        df = df.drop(columns=['Sign-in-Count'])
+
+    df[column_name] = [sign_count_array] * len(df)
+
+    return df
+
+excel_file_path = './names_and_sign_ins.xlsx'
+df = pd.read_excel(excel_file_path)
+
+df = convert_sign_count_to_array(df, 'Sign_Count_Array', 40)
+
+df.to_excel('./Extract.xlsx', index=False)
