@@ -44,14 +44,12 @@ import numpy as np
 from flask_login import UserMixin
 import ast
 
-
 class User(UserMixin):
     def __init__(self, student_id, first_name, last_name, sign_count):
         self.id = student_id
         self.first_name = first_name
         self.last_name = last_name
         self.sign_count = sign_count
-
 
 def read_users_from_excel(file_path):
     df = pd.read_excel(file_path)
@@ -66,14 +64,34 @@ def read_users_from_excel(file_path):
     # Print user information
     for user_id, user in users.items():
         print(
-            f"User ID: {user.id}, First Name: {user.first_name}, Last Name: {user.last_name}, Sign-in Count: {user.sign_count}")
+            f"User ID: {user.id}, First Name: {user.first_name}, Last Name: {user.last_name}, Sign-in-Count: {user.sign_count}")
 
     return users
 
+def save_users_to_excel(users, output_file_path):
+    user_data = {
+        'ID': [],
+        'First Name': [],
+        'Last Name': [],
+        'Sign-in-Count': []
+    }
+
+    for user_id, user in users.items():
+        user_data['ID'].append(user.id)
+        user_data['First Name'].append(user.first_name)
+        user_data['Last Name'].append(user.last_name)
+        user_data['Sign-in-Count'].append(' '.join(map(str, user.sign_count)))
+
+    user_df = pd.DataFrame(user_data)
+    user_df.to_excel(output_file_path, index=False)
+    print(f"User data saved to {output_file_path}")
 
 # Example usage
 file_path = "Extract.xlsx"
+output_file_path = "User_Data_Output.xlsx"
 users = read_users_from_excel(file_path)
+save_users_to_excel(users, output_file_path)
+
 
 
 
