@@ -1,5 +1,5 @@
 import pandas as pd
-import random
+import numpy as np
 
 names = [
     "James Smith",
@@ -35,7 +35,7 @@ names = [
 ]
 
 ids = list(range(1, 31))
-sign_in_counts = [random.randint(1, 30) for _ in range(30)]
+sign_in_counts = [list(np.random.randint(2, size=30)) for _ in range(30)]
 
 first_names = [name.split()[0] for name in names]
 last_names = [name.split()[1] for name in names]
@@ -47,4 +47,7 @@ df = pd.DataFrame({
     'Sign-in-Count': sign_in_counts
 })
 
-df.to_excel('names_and_sign_ins.xlsx', index=False)
+# 转换数组为字符串表示，只放入方括号中
+df['Sign-in-Count'] = df['Sign-in-Count'].apply(lambda x: '[' + ','.join(map(str, x)) + ']')
+
+df.to_excel('DataAnalysis.xlsx', index=False)
