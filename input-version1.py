@@ -193,6 +193,30 @@ def simulate_user_input(users):
         print("Skipping user input simulation.")
 
 
+# def save_users_to_excel(users, output_file_path, total_count):
+#     user_data = {
+#         'ID': [],
+#         'First Name': [],
+#         'Last Name': [],
+#         'Sign-in-Count': [],
+#         'Total-Count': []
+#     }
+#
+#     for user_id, user in users.items():
+#         user_data['ID'].append(user.id)
+#         user_data['First Name'].append(user.first_name)
+#         user_data['Last Name'].append(user.last_name)
+#
+#         sign_in_count = user.sign_count.tolist() + [0] * (int(total_count) - len(user.sign_count))
+#         user_data['Sign-in-Count'].append(sign_in_count)
+#
+#         user_data['Total-Count'].append(total_count if not user_data['Total-Count'] else np.nan)
+#
+#     user_df = pd.DataFrame(user_data)
+#
+#     user_df.to_excel(output_file_path, index=False)
+#     print(f"User data saved to {output_file_path}")
+
 def save_users_to_excel(users, output_file_path, total_count):
     user_data = {
         'ID': [],
@@ -208,19 +232,27 @@ def save_users_to_excel(users, output_file_path, total_count):
         user_data['Last Name'].append(user.last_name)
 
         sign_in_count = user.sign_count.tolist() + [0] * (int(total_count) - len(user.sign_count))
+        sign_in_count = sign_in_count if sign_in_count else [0]  # 如果列表为空，则将其替换为包含单个零的列表
         user_data['Sign-in-Count'].append(sign_in_count)
 
-        user_data['Total-Count'].append(total_count if not user_data['Total-Count'] else np.nan)
+        total_count_list = [total_count] * len(sign_in_count)  # 生成与签到次数列表相同长度的列表
+        user_data['Total-Count'].append(total_count_list)
 
     user_df = pd.DataFrame(user_data)
+
+    # 更新Total-Count列
+    for i in range(len(user_df)):
+        user_df.at[i, 'Total-Count'] = user_df.at[i, 'Total-Count'][0]
 
     user_df.to_excel(output_file_path, index=False)
     print(f"User data saved to {output_file_path}")
 
 
+
+
 # Example usage
-file_path = "Extract.xlsx"
-output_file_path = "./User_Data_Output.xlsx"
+file_path = "User_Data_Output.xlsx"
+output_file_path = "./User_Data_Output1.xlsx"
 users = read_users_from_excel(file_path)
 
 simulate_user_input(users)
