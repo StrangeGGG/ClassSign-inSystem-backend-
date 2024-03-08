@@ -5,14 +5,9 @@ import matplotlib.pyplot as plt
 df = pd.read_excel('ExampleData.xlsx')
 
 
-# df['Sign-in-Count'] = df['Sign-in-Count'].apply(lambda x: eval(x))
-
 
 def sum_sign_in_count(lst):
     return sum(lst)
-
-
-# df['Sign-in-Count_Sum'] = df['Sign-in-Count'].apply(sum_sign_in_count)
 
 
 df['Attendance Rate'] = df['Total-Count'] / df['Class_num_finished']
